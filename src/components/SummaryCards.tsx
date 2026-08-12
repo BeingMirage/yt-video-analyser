@@ -4,9 +4,10 @@ import { parse } from "date-fns";
 
 interface Props {
   shorts: ShortVideo[];
+  normalize?: boolean;
 }
 
-export function SummaryCards({ shorts }: Props) {
+export function SummaryCards({ shorts, normalize }: Props) {
   // Aggregate metrics
   const dayViews: Record<string, { total: number; count: number }> = {};
   const hourViews: Record<number, { total: number; count: number }> = {};
@@ -31,12 +32,16 @@ export function SummaryCards({ shorts }: Props) {
     hourViews[hour].count += 1;
   });
 
+  const maxDayCount = Math.max(...Object.values(dayViews).map(d => d.count), 0);
+  const maxHourCount = Math.max(...Object.values(hourViews).map(h => h.count), 0);
+
   // Calculate bests
   let bestDay = "N/A";
   let maxAvgDayViews = 0;
 
   for (const [day, data] of Object.entries(dayViews)) {
-    const avg = data.total / data.count;
+    const rawAvg = data.total / data.count;
+    const avg = normalize && maxDayCount > 0 ? rawAvg * (data.count / maxDayCount) : rawAvg;
     if (avg > maxAvgDayViews) {
       maxAvgDayViews = avg;
       bestDay = day;
@@ -50,7 +55,9 @@ export function SummaryCards({ shorts }: Props) {
 
   for (const [hStr, data] of Object.entries(hourViews)) {
     const hour = parseInt(hStr, 10);
-    const avg = data.total / data.count;
+    const rawAvg = data.total / data.count;
+    const avg = normalize && maxHourCount > 0 ? rawAvg * (data.count / maxHourCount) : rawAvg;
+    
     hourAverages.push({ hour, avg });
     if (avg > maxAvgHourViews) {
       maxAvgHourViews = avg;
@@ -83,7 +90,8 @@ export function SummaryCards({ shorts }: Props) {
         <CardContent>
           <div className="text-2xl font-bold text-white">{formatHourWindow(bestHour)}</div>
           <p className="text-xs text-neutral-500 mt-1">
-            Avg Views: {Math.round(maxAvgHourViews).toLocaleString()}
+            {normalize ? "Score: " : "Avg Views: "}
+            {Math.round(maxAvgHourViews).toLocaleString()}
           </p>
         </CardContent>
       </Card>
@@ -95,7 +103,8 @@ export function SummaryCards({ shorts }: Props) {
         <CardContent>
           <div className="text-2xl font-bold text-white">{bestDay}</div>
           <p className="text-xs text-neutral-500 mt-1">
-            Avg Views: {Math.round(maxAvgDayViews).toLocaleString()}
+            {normalize ? "Score: " : "Avg Views: "}
+            {Math.round(maxAvgDayViews).toLocaleString()}
           </p>
         </CardContent>
       </Card>

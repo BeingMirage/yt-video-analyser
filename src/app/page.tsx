@@ -16,6 +16,7 @@ export default function Home() {
   const [error, setError] = useState("");
   const [hasSearched, setHasSearched] = useState(false);
   const [selectedHour, setSelectedHour] = useState<number | null>(null);
+  const [normalize, setNormalize] = useState(false);
 
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,11 +92,13 @@ export default function Home() {
 
         {!loading && !error && shorts.length > 0 && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <SummaryCards shorts={shorts} />
+            <SummaryCards shorts={shorts} normalize={normalize} />
             <AnalyticsChart 
               shorts={shorts} 
               selectedHour={selectedHour} 
               onBarClick={(hour) => setSelectedHour(hour === selectedHour ? null : hour)} 
+              normalize={normalize}
+              onNormalizeToggle={() => setNormalize(!normalize)}
             />
             <ShortsTable 
               shorts={shorts} 

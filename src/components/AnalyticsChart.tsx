@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShortVideo } from "@/lib/youtube";
@@ -9,10 +8,11 @@ interface Props {
   shorts: ShortVideo[];
   onBarClick?: (hour: number) => void;
   selectedHour?: number | null;
+  normalize?: boolean;
+  onNormalizeToggle?: () => void;
 }
 
-export function AnalyticsChart({ shorts, onBarClick, selectedHour }: Props) {
-  const [normalize, setNormalize] = useState(false);
+export function AnalyticsChart({ shorts, onBarClick, selectedHour, normalize, onNormalizeToggle }: Props) {
   const hourViews: Record<number, { total: number; count: number }> = {};
 
   // Initialize all 24 hours
@@ -88,14 +88,16 @@ export function AnalyticsChart({ shorts, onBarClick, selectedHour }: Props) {
           <CardTitle className="text-xl font-semibold text-white">Average Views by Upload Hour (IST)</CardTitle>
           <CardDescription className="text-neutral-400">Discover when your audience is most active based on past performance.</CardDescription>
         </div>
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={() => setNormalize(!normalize)}
-          className={normalize ? "bg-red-950/50 border-red-900 text-red-400 hover:bg-red-900/50 hover:text-red-300" : "bg-neutral-800 border-neutral-700 text-neutral-300 hover:bg-neutral-700"}
-        >
-          {normalize ? "Normalized (Weighted)" : "Normalize by Video Count"}
-        </Button>
+        {onNormalizeToggle && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onNormalizeToggle}
+            className={normalize ? "bg-red-950/50 border-red-900 text-red-400 hover:bg-red-900/50 hover:text-red-300" : "bg-neutral-800 border-neutral-700 text-neutral-300 hover:bg-neutral-700"}
+          >
+            {normalize ? "Normalized (Weighted)" : "Normalize by Video Count"}
+          </Button>
+        )}
       </CardHeader>
       <CardContent>
         <div className="h-80 w-full mt-4">
@@ -112,9 +114,9 @@ export function AnalyticsChart({ shorts, onBarClick, selectedHour }: Props) {
                 dataKey="avgViews" 
                 radius={[4, 4, 0, 0]} 
                 name="Average Views"
-                onClick={(data) => {
-                  if (onBarClick && data && data.hourNumber !== undefined) {
-                    onBarClick(data.hourNumber);
+                onClick={(data: any) => {
+                  if (onBarClick && data?.payload?.hourNumber !== undefined) {
+                    onBarClick(data.payload.hourNumber);
                   }
                 }}
                 className={onBarClick ? "cursor-pointer" : ""}
