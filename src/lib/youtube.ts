@@ -16,8 +16,11 @@ export interface ShortVideo {
   uploadTimeIST: string;
   dayOfWeek: string;
   viewCount: number;
+  likeCount: number;
+  commentCount: number;
   videoUrl: string;
   duration: string;
+  durationSeconds: number;
 }
 
 export async function getChannelShorts(query: string): Promise<ShortVideo[]> {
@@ -109,8 +112,11 @@ export async function getChannelShorts(query: string): Promise<ShortVideo[]> {
           uploadTimeIST: formatTz(zonedDate, 'hh:mm:ss aa', { timeZone }),
           dayOfWeek: formatTz(zonedDate, 'EEEE', { timeZone }),
           viewCount: parseInt(video.statistics?.viewCount || '0', 10),
+          likeCount: parseInt(video.statistics?.likeCount || '0', 10),
+          commentCount: parseInt(video.statistics?.commentCount || '0', 10),
           videoUrl: `https://youtube.com/shorts/${video.id}`,
           duration: duration,
+          durationSeconds: seconds,
         });
       }
     }

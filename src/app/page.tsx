@@ -7,7 +7,11 @@ import { Input } from "@/components/ui/input";
 import { SummaryCards } from "@/components/SummaryCards";
 import { AnalyticsChart } from "@/components/AnalyticsChart";
 import { ShortsTable } from "@/components/ShortsTable";
+import { DurationChart } from "@/components/DurationChart";
+import { GrowthChart } from "@/components/GrowthChart";
+import { KeywordCloud } from "@/components/KeywordCloud";
 import { ShortVideo } from "@/lib/youtube";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
   const [query, setQuery] = useState("");
@@ -93,18 +97,42 @@ export default function Home() {
         {!loading && !error && shorts.length > 0 && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <SummaryCards shorts={shorts} normalize={normalize} />
-            <AnalyticsChart 
-              shorts={shorts} 
-              selectedHour={selectedHour} 
-              onBarClick={(hour) => setSelectedHour(hour === selectedHour ? null : hour)} 
-              normalize={normalize}
-              onNormalizeToggle={() => setNormalize(!normalize)}
-            />
-            <ShortsTable 
-              shorts={shorts} 
-              hourFilter={selectedHour} 
-              onClearFilter={() => setSelectedHour(null)} 
-            />
+            
+            <Tabs defaultValue="overview" className="w-full">
+              <div className="flex justify-center md:justify-start">
+                <TabsList className="grid w-full grid-cols-2 max-w-[400px] mb-8 bg-neutral-900 border border-neutral-800 rounded-lg p-1">
+                  <TabsTrigger value="overview" className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white text-neutral-400 rounded-md">
+                    Overview
+                  </TabsTrigger>
+                  <TabsTrigger value="insights" className="data-[state=active]:bg-neutral-800 data-[state=active]:text-white text-neutral-400 rounded-md">
+                    Deep Dive Insights
+                  </TabsTrigger>
+                </TabsList>
+              </div>
+
+              <TabsContent value="overview" className="space-y-8 mt-0 focus-visible:outline-none">
+                <AnalyticsChart 
+                  shorts={shorts} 
+                  selectedHour={selectedHour} 
+                  onBarClick={(hour) => setSelectedHour(hour === selectedHour ? null : hour)} 
+                  normalize={normalize}
+                  onNormalizeToggle={() => setNormalize(!normalize)}
+                />
+                <ShortsTable 
+                  shorts={shorts} 
+                  hourFilter={selectedHour} 
+                  onClearFilter={() => setSelectedHour(null)} 
+                />
+              </TabsContent>
+
+              <TabsContent value="insights" className="space-y-8 mt-0 focus-visible:outline-none">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                  <GrowthChart shorts={shorts} />
+                  <DurationChart shorts={shorts} />
+                </div>
+                <KeywordCloud shorts={shorts} />
+              </TabsContent>
+            </Tabs>
           </div>
         )}
       </div>

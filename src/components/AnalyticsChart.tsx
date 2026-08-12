@@ -53,33 +53,7 @@ export function AnalyticsChart({ shorts, onBarClick, selectedHour, normalize, on
     };
   });
 
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      const point = payload[0].payload;
-      return (
-        <div className="bg-neutral-900 border border-neutral-700 p-3 rounded-lg shadow-lg">
-          <p className="text-white font-medium mb-2">{label}</p>
-          <div className="space-y-1">
-            <p className="text-red-400 text-sm flex justify-between gap-4">
-              <span>{normalize ? "Normalized Score:" : "Average Views:"}</span>
-              <span className="font-bold">{point.avgViews.toLocaleString()}</span>
-            </p>
-            {normalize && (
-              <p className="text-neutral-500 text-xs flex justify-between gap-4">
-                <span>Original Avg:</span>
-                <span>{point.originalAvg.toLocaleString()}</span>
-              </p>
-            )}
-            <p className="text-neutral-300 text-sm flex justify-between gap-4">
-              <span>Videos Uploaded:</span>
-              <span className="font-bold">{point.videos}</span>
-            </p>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
+
 
   return (
     <Card className="bg-neutral-900 border-neutral-800">
@@ -107,13 +81,41 @@ export function AnalyticsChart({ shorts, onBarClick, selectedHour, normalize, on
               <XAxis dataKey="hour" stroke="#888" fontSize={12} tickLine={false} axisLine={false} />
               <YAxis stroke="#888" fontSize={12} tickLine={false} axisLine={false} tickFormatter={(value) => `${value >= 1000 ? (value / 1000).toFixed(1) + 'k' : value}`} />
               <Tooltip 
-                content={<CustomTooltip />}
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                content={({ active, payload, label }: any) => {
+                  if (active && payload && payload.length) {
+                    const point = payload[0].payload;
+                    return (
+                      <div className="bg-neutral-900 border border-neutral-700 p-3 rounded-lg shadow-lg">
+                        <p className="text-white font-medium mb-2">{label}</p>
+                        <div className="space-y-1">
+                          <p className="text-red-400 text-sm flex justify-between gap-4">
+                            <span>{normalize ? "Normalized Score:" : "Average Views:"}</span>
+                            <span className="font-bold">{point.avgViews.toLocaleString()}</span>
+                          </p>
+                          {normalize && (
+                            <p className="text-neutral-500 text-xs flex justify-between gap-4">
+                              <span>Original Avg:</span>
+                              <span>{point.originalAvg.toLocaleString()}</span>
+                            </p>
+                          )}
+                          <p className="text-neutral-300 text-sm flex justify-between gap-4">
+                            <span>Videos Uploaded:</span>
+                            <span className="font-bold">{point.videos}</span>
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
                 cursor={{ fill: '#333' }}
               />
               <Bar 
                 dataKey="avgViews" 
                 radius={[4, 4, 0, 0]} 
                 name="Average Views"
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 onClick={(data: any) => {
                   if (onBarClick && data?.payload?.hourNumber !== undefined) {
                     onBarClick(data.payload.hourNumber);
