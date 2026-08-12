@@ -74,7 +74,7 @@ export default function Home() {
           <CardContent>
             <form onSubmit={handleSearch} className="flex gap-4">
               <Input
-                placeholder="e.g. @simstufs108"
+                placeholder="e.g. @simstuffs108"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="flex-1 bg-neutral-950/50 border-neutral-700 text-white placeholder:text-neutral-500 focus-visible:ring-2 focus-visible:ring-red-500/50 focus-visible:border-red-500/50 transition-all"
