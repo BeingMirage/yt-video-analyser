@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Search, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { SummaryCards } from "@/components/SummaryCards";
 import { AnalyticsChart } from "@/components/AnalyticsChart";
 import { ShortsTable } from "@/components/ShortsTable";
@@ -53,32 +54,47 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-50 p-4 md:p-8 font-sans">
-      <div className="max-w-6xl mx-auto space-y-8">
-        {/* Header & Search */}
-        <div className="flex flex-col items-center text-center space-y-6 pt-12 pb-8">
-          <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">
-            YT Shorts Analyzer
+      <div className="max-w-6xl mx-auto space-y-12">
+        <div className="text-center space-y-4 pt-8">
+          <h1 className="text-5xl font-extrabold tracking-tight bg-gradient-to-br from-red-400 via-red-500 to-orange-500 bg-clip-text text-transparent drop-shadow-sm">
+            YouTube Shorts Analyzer
           </h1>
-          <p className="text-neutral-400 max-w-lg">
-            Discover the optimal upload times and view count performance for any YouTube channel&apos;s Shorts in Indian Standard Time (IST).
+          <p className="text-neutral-400 text-lg max-w-2xl mx-auto">
+            Discover the exact time to upload your Shorts for maximum viral potential.
           </p>
+        </div>
 
-          <form onSubmit={handleSearch} className="flex w-full max-w-md gap-2 mt-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500" />
+        <Card className="max-w-2xl mx-auto bg-neutral-900/40 backdrop-blur-md border-neutral-800 shadow-2xl">
+          <CardHeader>
+            <CardTitle className="text-white">Analyze a Channel</CardTitle>
+            <CardDescription className="text-neutral-400">
+              Enter a YouTube channel URL, ID, or @handle.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleSearch} className="flex gap-4">
               <Input
-                type="text"
-                placeholder="Channel ID or @handle"
+                placeholder="e.g. @simstufs108"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="pl-10 bg-neutral-900 border-neutral-800 text-white placeholder:text-neutral-500 focus-visible:ring-red-500"
+                className="flex-1 bg-neutral-950/50 border-neutral-700 text-white placeholder:text-neutral-500 focus-visible:ring-2 focus-visible:ring-red-500/50 focus-visible:border-red-500/50 transition-all"
               />
-            </div>
-            <Button type="submit" disabled={loading} className="bg-red-600 hover:bg-red-700 text-white">
-              {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Analyze"}
-            </Button>
-          </form>
-        </div>
+              <Button type="submit" disabled={loading} className="bg-red-600 hover:bg-red-700 text-white shadow-lg shadow-red-900/20 transition-all hover:scale-105 active:scale-95">
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Analyzing...
+                  </>
+                ) : (
+                  <>
+                    <Search className="mr-2 h-4 w-4" />
+                    Analyze
+                  </>
+                )}
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
 
         {/* Error State */}
         {error && (
@@ -97,7 +113,7 @@ export default function Home() {
         {!loading && !error && shorts.length > 0 && (
           <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <SummaryCards shorts={shorts} normalize={normalize} />
-            
+
             <Tabs defaultValue="overview" className="w-full">
               <div className="flex justify-center md:justify-start">
                 <TabsList className="grid w-full grid-cols-2 max-w-[400px] mb-8 bg-neutral-900 border border-neutral-800 rounded-lg p-1">
@@ -111,17 +127,17 @@ export default function Home() {
               </div>
 
               <TabsContent value="overview" className="space-y-8 mt-0 focus-visible:outline-none">
-                <AnalyticsChart 
-                  shorts={shorts} 
-                  selectedHour={selectedHour} 
-                  onBarClick={(hour) => setSelectedHour(hour === selectedHour ? null : hour)} 
+                <AnalyticsChart
+                  shorts={shorts}
+                  selectedHour={selectedHour}
+                  onBarClick={(hour) => setSelectedHour(hour === selectedHour ? null : hour)}
                   normalize={normalize}
                   onNormalizeToggle={() => setNormalize(!normalize)}
                 />
-                <ShortsTable 
-                  shorts={shorts} 
-                  hourFilter={selectedHour} 
-                  onClearFilter={() => setSelectedHour(null)} 
+                <ShortsTable
+                  shorts={shorts}
+                  hourFilter={selectedHour}
+                  onClearFilter={() => setSelectedHour(null)}
                 />
               </TabsContent>
 

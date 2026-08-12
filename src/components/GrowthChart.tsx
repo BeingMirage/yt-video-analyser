@@ -54,7 +54,7 @@ export function GrowthChart({ shorts }: Props) {
                   if (active && payload && payload.length) {
                     const point = payload[0].payload;
                     return (
-                      <div className="bg-neutral-900 border border-neutral-700 p-3 rounded-lg shadow-lg max-w-xs">
+                      <div className="bg-neutral-900/80 backdrop-blur-md border border-neutral-700 p-3 rounded-xl shadow-2xl max-w-xs">
                         <p className="text-white font-medium mb-1 line-clamp-2">{point.title}</p>
                         <p className="text-neutral-400 text-xs mb-2">{label}</p>
                         <p className="text-red-400 text-sm flex justify-between gap-4">

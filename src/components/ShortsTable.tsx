@@ -117,7 +117,7 @@ export function ShortsTable({ shorts, hourFilter, onClearFilter }: Props) {
               {sortedShorts.map((short) => {
                 const engagementRate = short.viewCount > 0 ? ((short.likeCount + short.commentCount) / short.viewCount * 100).toFixed(2) : "0.00";
                 return (
-                  <TableRow key={short.id} className="border-neutral-800 hover:bg-neutral-800/50">
+                  <TableRow key={short.id} className="border-neutral-800 hover:bg-neutral-800/80 transition-colors">
                   <TableCell>
                     <div className="relative group w-16 h-24 rounded overflow-hidden bg-neutral-800">
                       {/* eslint-disable-next-line @next/next/no-img-element */}

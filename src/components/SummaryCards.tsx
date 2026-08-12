@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ShortVideo } from "@/lib/youtube";
+import { Clock, Calendar, Zap } from "lucide-react";
 import { parse } from "date-fns";
 
 interface Props {
@@ -83,11 +84,13 @@ export function SummaryCards({ shorts, normalize }: Props) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <Card className="bg-neutral-900 border-neutral-800">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-neutral-400">Optimal Upload Time (IST)</CardTitle>
+      <Card className="bg-neutral-900 border-neutral-800 hover:border-red-900/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-red-900/10 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <CardHeader className="pb-2 flex flex-row items-center gap-2 space-y-0 relative">
+          <Clock className="h-4 w-4 text-red-400" />
+          <CardTitle className="text-sm font-medium text-neutral-400">Optimal Upload Time</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           <div className="text-2xl font-bold text-white">{formatHourWindow(bestHour)}</div>
           <p className="text-xs text-neutral-500 mt-1">
             {normalize ? "Score: " : "Avg Views: "}
@@ -96,11 +99,13 @@ export function SummaryCards({ shorts, normalize }: Props) {
         </CardContent>
       </Card>
 
-      <Card className="bg-neutral-900 border-neutral-800">
-        <CardHeader className="pb-2">
+      <Card className="bg-neutral-900 border-neutral-800 hover:border-orange-900/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-orange-900/10 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <CardHeader className="pb-2 flex flex-row items-center gap-2 space-y-0 relative">
+          <Calendar className="h-4 w-4 text-orange-400" />
           <CardTitle className="text-sm font-medium text-neutral-400">Best Upload Day</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           <div className="text-2xl font-bold text-white">{bestDay}</div>
           <p className="text-xs text-neutral-500 mt-1">
             {normalize ? "Score: " : "Avg Views: "}
@@ -109,11 +114,13 @@ export function SummaryCards({ shorts, normalize }: Props) {
         </CardContent>
       </Card>
 
-      <Card className="bg-neutral-900 border-neutral-800">
-        <CardHeader className="pb-2">
+      <Card className="bg-neutral-900 border-neutral-800 hover:border-yellow-900/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-yellow-900/10 relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <CardHeader className="pb-2 flex flex-row items-center gap-2 space-y-0 relative">
+          <Zap className="h-4 w-4 text-yellow-400" />
           <CardTitle className="text-sm font-medium text-neutral-400">Top 3 Peak Windows</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="relative">
           <div className="flex flex-col gap-1">
             {peakWindows.length > 0 ? (
               peakWindows.map((pw, i) => (

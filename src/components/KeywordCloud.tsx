@@ -59,7 +59,7 @@ export function KeywordCloud({ shorts }: Props) {
             {keywords.map((k) => (
               <div 
                 key={k.word} 
-                className="flex flex-col items-start p-3 bg-neutral-800 hover:bg-neutral-700 border border-neutral-700 rounded-lg text-neutral-200 transition-colors"
+                className="flex flex-col items-start p-3 bg-neutral-900/50 hover:bg-neutral-800 border border-neutral-800 hover:border-red-900/50 rounded-xl text-neutral-200 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-red-900/10"
               >
                 <span className="text-sm font-semibold">{k.word.toUpperCase()}</span>
                 <span className="text-xs text-neutral-400 mt-1">
